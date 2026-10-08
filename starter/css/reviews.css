@@ -1,0 +1,145 @@
+/* ==========================================================================
+   Issue #1 · the review wall: the Reviews button on a card, and the dialog.
+   ========================================================================== */
+
+/* ---------- on the card ---------- */
+.reviews-open {
+  font: 700 0.75rem/1 ui-monospace, Menlo, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--sea);
+  background: transparent;
+  border: 2px solid var(--line);
+  border-radius: 99px;
+  padding: 0 0.9rem;
+  min-height: 2.75rem;
+  margin-left: auto;
+  cursor: pointer;
+}
+.reviews-open:hover { border-color: var(--sea); }
+.reviews-open:focus-visible { outline: 3px solid var(--sea); outline-offset: 2px; }
+
+/* ---------- the dialog ---------- */
+dialog.reviews {
+  width: min(100% - 2rem, 40rem);
+  max-height: min(100% - 2rem, 52rem);
+  padding: 1.5rem;
+  color: var(--ink);
+  background: var(--night-2);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+}
+dialog.reviews::backdrop { background: rgb(8 10 15 / 0.75); }
+
+.reviews-head { display: flex; align-items: start; justify-content: space-between; gap: 1rem; }
+.reviews-head h2 { margin: 0; font-size: clamp(1.5rem, 1rem + 2vw, 2.1rem); }
+.reviews-close {
+  flex: none;
+  font: 700 1rem/1 system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--night-3);
+  border: 2px solid var(--line);
+  border-radius: 99px;
+  width: 2.75rem;
+  height: 2.75rem;
+  cursor: pointer;
+}
+.reviews-summary { margin: 0.4rem 0 1rem; font: 700 0.85rem/1.4 ui-monospace, Menlo, monospace; color: var(--lantern); }
+
+.reviews-status { margin: 0 0 0.8rem; color: var(--ink-2); font-style: italic; }
+.reviews-status:focus { outline: none; }
+dialog.reviews:has(.review-list[aria-busy="true"]) .reviews-status { animation: pulse 1.2s ease-in-out infinite alternate; }
+@media (prefers-reduced-motion: reduce) {
+  dialog.reviews:has(.review-list[aria-busy="true"]) .reviews-status { animation: none; }
+}
+
+/* a failed GET or DELETE */
+.reviews-error:has(p:not(:empty)) {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem;
+  border: 2px solid var(--ember); border-radius: 12px;
+  padding: 0.8rem 1rem; margin: 0 0 1rem;
+  background: color-mix(in srgb, var(--ember) 12%, var(--night-2));
+}
+.reviews-error p { margin: 0; }
+
+/* the reviews */
+.review-list { list-style: none; margin: 0 0 1.5rem; padding: 0; display: grid; gap: 0.8rem; }
+.review {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.2rem 1rem;
+  padding: 0.9rem 1rem;
+  background: var(--night);
+  border: 2px solid var(--line);
+  border-radius: 12px;
+}
+.review p { margin: 0; grid-column: 1; overflow-wrap: anywhere; }
+.review-meta { color: var(--ink-2); font-size: 0.85rem; }
+.review-meta strong { color: var(--ink); }
+.review-stars { color: var(--lantern); letter-spacing: 0.1em; }
+.review-delete {
+  grid-column: 2; grid-row: 1 / span 2; align-self: center;
+  font: 700 0.8rem system-ui, sans-serif;
+  color: var(--ember);
+  background: transparent;
+  border: 2px solid var(--line);
+  border-radius: 99px;
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+}
+.review-delete:hover { border-color: var(--ember); }
+.review-delete:disabled { opacity: 0.6; cursor: progress; }
+
+/* ---------- the form ---------- */
+.review-form { display: grid; gap: 0.35rem; border-top: 2px solid var(--line); padding-top: 1.2rem; }
+.review-form h3 { margin: 0 0 0.4rem; }
+.review-form label, .stars legend { font-weight: 700; margin-top: 0.5rem; }
+.review-form input[type="text"],
+.review-form textarea {
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: var(--night);
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+}
+.review-form textarea { resize: vertical; }
+.review-form input[aria-invalid="true"],
+.review-form textarea[aria-invalid="true"] { border-color: var(--ember); }
+.review-form .hint { margin: 0; color: var(--ink-2); font-size: 0.85rem; }
+.field-error, .form-error { margin: 0; color: var(--ember); font-size: 0.9rem; font-weight: 700; }
+.field-error:empty, .form-error:empty { display: none; }
+.review-form :focus-visible { outline: 3px solid var(--sea); outline-offset: 2px; }
+
+/* five stars: real radio buttons, so arrow keys choose a rating */
+.stars { border: 0; margin: 0; padding: 0; display: flex; align-items: center; flex-wrap: wrap; }
+.stars legend { padding: 0; margin-bottom: 0.2rem; }
+.stars input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+/* an empty star still needs 3:1 against the dialog to be seen */
+.stars label { font-size: 1.8rem; line-height: 1; padding: 0 0.15rem; margin: 0; color: color-mix(in srgb, var(--ink-2) 55%, var(--night-2)); cursor: pointer; }
+.stars input:focus-visible + label { outline: 3px solid var(--sea); outline-offset: 2px; border-radius: 4px; }
+.stars:has(input[value="1"]:checked) label:nth-of-type(-n + 1),
+.stars:has(input[value="2"]:checked) label:nth-of-type(-n + 2),
+.stars:has(input[value="3"]:checked) label:nth-of-type(-n + 3),
+.stars:has(input[value="4"]:checked) label:nth-of-type(-n + 4),
+.stars:has(input[value="5"]:checked) label:nth-of-type(-n + 5) { color: var(--lantern); }
+.stars:has(input[aria-invalid="true"]) label { color: color-mix(in srgb, var(--ember) 60%, var(--line)); }
+
+.review-submit {
+  justify-self: start;
+  margin-top: 0.8rem;
+  font: 800 1rem "Bricolage Grotesque", system-ui, sans-serif;
+  background: var(--lantern);
+  color: var(--night);
+  border: 0;
+  border-radius: 99px;
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+}
+.review-submit:disabled { opacity: 0.6; cursor: progress; }
+
+/* ---------- print: nothing to click on paper ---------- */
+@media print {
+  .reviews-open, dialog.reviews { display: none; }
+}
