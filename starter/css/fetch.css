@@ -37,3 +37,15 @@
   }
   .vendor-card .rating { grid-area: rating; margin: 0.4rem 0 1rem; }
 }
+
+/* Try again: a quiet pill, like the filter buttons */
+.load-error button {
+  font: 700 0.9rem "Bricolage Grotesque", system-ui, sans-serif;
+  color: var(--night);
+  background: var(--lantern);
+  border: 0;
+  border-radius: 99px;
+  padding: 0.55rem 1.2rem;
+  cursor: pointer;
+}
+.load-error button:focus-visible { outline: 3px solid var(--sea); outline-offset: 2px; }

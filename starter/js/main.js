@@ -2,16 +2,41 @@
 import { state, toggleSaved } from "./state.js";
 import { save, load } from "./storage.js";
 import { render } from "./render.js";
+import { getJSON, describe } from "./api.js";
 import { setupMenu } from "./menu.js";
 import { setupTickets } from "./tickets.js";
 
 const filters = document.querySelector(".filters");
 const list = document.querySelector(".vendor-list");
+const statusLine = document.querySelector(".status");
+const retry = document.querySelector(".load-error .retry");
 
 // Every change goes through here: draw, then remember
 function update() {
   render();
   save();
+}
+
+// loading → render → GET /stalls → ready or error → render.
+// Only the newest call may write: an older answer arriving late is dropped.
+let latestLoad = 0;
+async function loadStalls() {
+  const thisLoad = ++latestLoad;
+  state.status = "loading";
+  state.error = null;
+  render();
+  try {
+    const stalls = await getJSON("/stalls", { signal: AbortSignal.timeout(15000) });
+    if (thisLoad !== latestLoad) return;
+    state.stalls = stalls;
+    state.status = "ready";
+  } catch (error) {
+    if (thisLoad !== latestLoad) return;
+    console.error(error); // the details for us; a sentence for people
+    state.error = describe(error);
+    state.status = "error";
+  }
+  render();
 }
 
 filters.addEventListener("click", (event) => {
@@ -34,7 +59,14 @@ list.addEventListener("click", (event) => {
   update();
 });
 
+// Try again hides itself while loading: focus goes to the status line first,
+// so keyboard users aren't left on a button that just disappeared
+retry.addEventListener("click", () => {
+  statusLine.focus();
+  loadStalls();
+});
+
 setupMenu();
 setupTickets();
 load();
-render();
+await loadStalls();
