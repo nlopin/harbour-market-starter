@@ -1,4 +1,3 @@
-import { stalls } from "./data.js";
 import { state, visibleStalls } from "./state.js";
 
 const template = document.querySelector("#stall-template");
@@ -48,7 +47,7 @@ export function render() {
   for (const button of filters.querySelectorAll("button")) {
     button.setAttribute("aria-pressed", String(button.dataset.filter === state.tag));
   }
-  count.textContent = visible.length === stalls.length ? "" : `${visible.length} of ${stalls.length} stalls`;
+  count.textContent = visible.length === state.stalls.length ? "" : `${visible.length} of ${state.stalls.length} stalls`;
   savedCount.textContent = state.saved.size ? `♥ ${state.saved.size} saved` : "";
 
   // Controls are part of the page too: draw them from state
