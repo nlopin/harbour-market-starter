@@ -11,6 +11,12 @@ const retry = document.querySelector(".load-error button");
 
 const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
 
+// "★ 4.7 · 3 reviews", or "no reviews yet" (rating is null then)
+function rating(stall) {
+  if (!stall.reviewCount) return "no reviews yet";
+  return `★ ${stall.rating.toFixed(1)} · ${plural(stall.reviewCount, "review")}`;
+}
+
 // Data in, element out
 function card(stall) {
   const li = template.content.firstElementChild.cloneNode(true);
@@ -25,6 +31,7 @@ function card(stall) {
   li.querySelector("h3").textContent = stall.name;
   li.querySelector(".blurb").textContent = stall.blurb;
   li.querySelector(".price").textContent = stall.price === 0 ? "free" : `from €${stall.price}`;
+  li.querySelector(".rating").textContent = rating(stall);
   li.querySelector(".badge").hidden = !stall.soldOut;
 
   const isSaved = state.saved.has(stall.id);
