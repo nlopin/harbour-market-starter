@@ -1,0 +1,28 @@
+/* ==========================================================================
+   Issue #7 · prices in the visitor's currency: the select next to the filters.
+   ========================================================================== */
+
+.toolbar { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 0 1.5rem; }
+
+.currency {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.6rem;
+  margin: 0 0 1.5rem;
+  font: 700 0.85rem/1 ui-monospace, Menlo, monospace;
+  color: var(--ink-2);
+}
+.currency[hidden] { display: none; } /* display: flex would beat the hidden attribute */
+
+.currency select {
+  font: inherit;
+  color: var(--sea);
+  background: var(--night-2);
+  border: 2px solid var(--line);
+  border-radius: 99px;
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+}
+.currency select:disabled { opacity: 0.5; cursor: progress; }
+.currency select:focus-visible { outline: 3px solid var(--sea); outline-offset: 2px; }
+.rates-date { font-weight: 400; }
+
+@media print { .currency { display: none; } }
