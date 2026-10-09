@@ -36,6 +36,12 @@ list.addEventListener("click", (event) => {
   update();
 });
 
+// The currency only changes how prices are drawn: no request
+document.querySelector("#currency").addEventListener("change", (event) => {
+  state.currency = event.target.value;
+  update();
+});
+
 // GET /stalls into state. Never throws: a failure becomes state.status = "error"
 async function loadStalls() {
   state.status = "loading";

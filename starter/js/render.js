@@ -1,4 +1,5 @@
 import { state, visibleStalls } from "./state.js";
+import { formatPrice, ratesNote } from "./currency.js";
 
 const template = document.querySelector("#stall-template");
 const list = document.querySelector(".vendor-list");
@@ -8,6 +9,9 @@ const savedCount = document.querySelector(".saved-count");
 const search = document.querySelector("#vendor-search");
 const errorText = document.querySelector(".load-error p");
 const retry = document.querySelector(".load-error button");
+const currencyBox = document.querySelector(".currency");
+const currencySelect = document.querySelector("#currency");
+const ratesDate = document.querySelector(".rates-date");
 
 const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
 
@@ -30,7 +34,7 @@ function card(stall) {
   li.querySelector(".tag").textContent = stall.tag;
   li.querySelector("h3").textContent = stall.name;
   li.querySelector(".blurb").textContent = stall.blurb;
-  li.querySelector(".price").textContent = stall.price === 0 ? "free" : `from €${stall.price}`;
+  li.querySelector(".price").textContent = stall.price === 0 ? "free" : `from ${formatPrice(stall.price)}`;
   li.querySelector(".rating").textContent = rating(stall);
   li.querySelector(".badge").hidden = !stall.soldOut;
 
@@ -89,4 +93,10 @@ export function render() {
   // Controls are part of the page too: draw them from state
   // (only when different: rewriting the box you're typing in can move the cursor)
   if (search.value !== state.query) search.value = state.query;
+
+  // The currency select: disabled while the rates load, hidden if they failed
+  currencyBox.hidden = state.ratesStatus === "error";
+  currencySelect.disabled = state.ratesStatus === "loading";
+  currencySelect.value = state.currency;
+  ratesDate.textContent = ratesNote();
 }

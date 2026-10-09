@@ -45,3 +45,25 @@ export async function loadRates() {
   state.ratesDate = data.date;
   state.ratesStatus = "ready";
 }
+
+// Prices show in the chosen currency only once the rates are here
+const shownCurrency = () => (state.ratesStatus === "ready" ? state.currency : "EUR");
+
+// 8 → "€8", "£6.78", "$8.96", "CHF 7.45". Always converted from the euro price,
+// so switching back and forth never converts twice.
+export function formatPrice(euros) {
+  if (euros === 0) return "free";
+  const currency = shownCurrency();
+  const amount = currency === "EUR" ? euros : euros * state.rates[currency];
+  const decimals = Number.isInteger(amount) ? 0 : 2;
+  return new Intl.NumberFormat("en-US", {
+    style: "currency", currency, minimumFractionDigits: decimals, maximumFractionDigits: 2,
+  }).format(amount);
+}
+
+// "2026-10-02" → "Rates of 2 October"
+export function ratesNote() {
+  if (state.ratesStatus !== "ready") return "";
+  const day = new Date(`${state.ratesDate}T00:00`); // local midnight, not UTC
+  return `Rates of ${day.toLocaleDateString("en-GB", { day: "numeric", month: "long" })}`;
+}
