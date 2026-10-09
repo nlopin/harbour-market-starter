@@ -50,6 +50,12 @@ async function loadStalls() {
   render();
 }
 
+// Focus goes to the status line first: the button is about to be hidden
+document.querySelector(".load-error button").addEventListener("click", () => {
+  document.querySelector(".finder .status").focus();
+  loadStalls();
+});
+
 setupMenu();
 setupTickets();
 load();
