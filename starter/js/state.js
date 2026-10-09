@@ -7,6 +7,10 @@ export const state = {
   tag: "all",        // the pressed filter button
   query: "",         // what's typed in the search box
   saved: new Set(),  // ids of the ♥ stalls
+  currency: "EUR",   // the chosen currency for prices
+  rates: null,       // { GBP, USD, CHF } per euro, from the rates API
+  ratesDate: "",     // the day those rates are from, "2026-10-09"
+  ratesStatus: "loading", // "loading" | "ready" | "error"
 };
 
 // Derived, never stored: what should be on screen right now?

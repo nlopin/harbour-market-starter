@@ -5,6 +5,7 @@ import { render } from "./render.js";
 import { setupMenu } from "./menu.js";
 import { setupTickets } from "./tickets.js";
 import { getJSON, describe } from "./api.js";
+import { loadRates } from "./currency.js";
 
 const filters = document.querySelector(".filters");
 const list = document.querySelector(".vendor-list");
@@ -59,4 +60,5 @@ document.querySelector(".load-error button").addEventListener("click", () => {
 setupMenu();
 setupTickets();
 load();
+loadRates().then(render); // in parallel: the stalls never wait for the rates
 await loadStalls();
