@@ -20,13 +20,24 @@ export class HttpError extends Error {
 // Resolves with the parsed body (null for a 204); rejects with an HttpError
 // for 4xx/5xx, and lets network errors and aborts through.
 export async function request(method, path, data, options = {}) {
+  return send(API + path, method, data, options);
+}
+
+export const getJSON = (path, options) => request("GET", path, undefined, options);
+export const postJSON = (path, data, options) => request("POST", path, data, options);
+
+// Another service's JSON (the exchange rates): a full URL, the same errors
+export const getExternalJSON = (url, options) => send(url, "GET", undefined, options);
+
+// The one place that calls fetch()
+async function send(url, method, data, options = {}) {
   const init = { ...options, method, headers: { ...options.headers } };
   if (data !== undefined) {
     init.body = JSON.stringify(data);
     init.headers["Content-Type"] = "application/json";
   }
 
-  const response = await fetch(API + path, init);
+  const response = await fetch(url, init);
 
   if (!response.ok) {
     const body = await response.json().catch(() => null); // an error page that isn't JSON: no body
@@ -35,9 +46,6 @@ export async function request(method, path, data, options = {}) {
   if (response.status === 204) return null;
   return response.json();
 }
-
-export const getJSON = (path, options) => request("GET", path, undefined, options);
-export const postJSON = (path, data, options) => request("POST", path, data, options);
 
 // A short sentence for people; the error itself goes to the console.
 export function describe(error) {
