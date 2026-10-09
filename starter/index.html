@@ -52,7 +52,12 @@
       <div class="finder">
         <label for="vendor-search">Find a stall</label>
         <input id="vendor-search" type="search" autocomplete="off">
-        <p class="status" aria-live="polite"><output class="filter-count"></output> <span class="saved-count"></span></p>
+        <p class="status" aria-live="polite" tabindex="-1"><output class="filter-count"></output> <span class="saved-count"></span></p>
+      </div>
+      <!-- Always in the page, so screen readers hear the alert when it's filled in -->
+      <div class="load-error">
+        <p role="alert"></p>
+        <button class="retry" type="button" hidden>Try again</button>
       </div>
       <!-- Drawn by JavaScript from the stalls array, with the template below -->
       <ul class="vendor-list"></ul>
@@ -63,6 +68,7 @@
             <h3></h3>
             <p class="blurb"></p>
             <small class="price"></small>
+            <p class="rating"></p>
             <strong class="badge" hidden>Sold out</strong>
             <div class="card-actions">
               <a class="card-link" href="#map">Find the stall →</a>
