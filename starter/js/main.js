@@ -18,7 +18,6 @@ function update() {
 export async function loadStalls() {
   state.status = "loading";
   render();
-  await new Promise((resolve) => setTimeout(resolve, 2000));
 
   try {
     state.stalls = await getJSON("/stalls");
