@@ -22,6 +22,19 @@
   background: color-mix(in srgb, var(--ember) 12%, var(--night-2));
 }
 .load-error p { margin: 0; color: var(--ink); }
+.load-error button {
+  font: 700 0.9rem "Bricolage Grotesque", system-ui, sans-serif;
+  color: var(--night);
+  background: var(--lantern);
+  border: 0;
+  border-radius: 99px;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+.load-error button:hover {
+  background: var(--ink);
+}
 .status:focus { outline: none; }
 
 /* the wide featured card: the rating gets its own row in the grid */

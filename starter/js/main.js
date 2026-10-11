@@ -4,6 +4,7 @@ import { save, load } from "./storage.js";
 import { render } from "./render.js";
 import { setupMenu } from "./menu.js";
 import { setupTickets } from "./tickets.js";
+import { getJSON, describe } from "./api.js";
 
 const filters = document.querySelector(".filters");
 const list = document.querySelector(".vendor-list");
@@ -12,6 +13,22 @@ const list = document.querySelector(".vendor-list");
 function update() {
   render();
   save();
+}
+
+export async function loadStalls() {
+  state.status = "loading";
+  render();
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  try {
+    state.stalls = await getJSON("/stalls");
+    state.status = "ready";
+  } catch (error) {
+    console.error(error);
+    state.error = describe(error);
+    state.status = "error";
+  }
+  render();
 }
 
 filters.addEventListener("click", (event) => {
@@ -34,7 +51,14 @@ list.addEventListener("click", (event) => {
   update();
 });
 
+const statusLine = document.querySelector(".status");
+const retryButton = document.querySelector(".load-error button");
+retryButton?.addEventListener("click", () => {
+  statusLine?.focus();
+  loadStalls();
+});
+
 setupMenu();
 setupTickets();
 load();
-render();
+await loadStalls();
