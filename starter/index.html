@@ -175,6 +175,31 @@
         <button type="button" hidden>Try again</button>
       </div>
       <ul class="review-list"></ul>
+
+      <!-- novalidate: the server checks the fields, and its messages go under them -->
+      <form class="review-form" novalidate>
+        <h3>Add your review</h3>
+        <label for="review-author">Your name</label>
+        <input id="review-author" name="author" type="text" autocomplete="name" aria-describedby="review-author-note">
+        <p class="note" id="review-author-note"></p>
+
+        <label for="review-rating">Rating</label>
+        <select id="review-rating" name="rating" aria-describedby="review-rating-note">
+          <option value="5">★★★★★ 5</option>
+          <option value="4">★★★★☆ 4</option>
+          <option value="3">★★★☆☆ 3</option>
+          <option value="2">★★☆☆☆ 2</option>
+          <option value="1">★☆☆☆☆ 1</option>
+        </select>
+        <p class="note" id="review-rating-note"></p>
+
+        <label for="review-text">Your review</label>
+        <textarea id="review-text" name="text" rows="3" aria-describedby="review-text-note"></textarea>
+        <p class="note" id="review-text-note" data-hint="10–280 characters.">10–280 characters.</p>
+
+        <p class="form-error" role="alert"></p>
+        <button type="submit">Post review</button>
+      </form>
     </div>
   </dialog>
   <template id="review-template">

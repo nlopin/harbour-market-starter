@@ -63,3 +63,40 @@
 .review time { color: var(--ink-2); font-size: 0.85rem; }
 /* long words without spaces would push the dialog wider */
 .review-text { color: var(--ink-2); overflow-wrap: anywhere; }
+
+/* the form: like the ticket form, in one column */
+.review-form { display: grid; gap: 0.35rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+.review-form h3 { margin: 0 0 0.4rem; }
+.review-form label { font-weight: 700; margin-top: 0.5rem; }
+.review-form input,
+.review-form select,
+.review-form textarea {
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: var(--night);
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+}
+.review-form textarea { resize: vertical; }
+.review-form :focus-visible { outline: 3px solid var(--sea); outline-offset: 2px; }
+.review-form [aria-invalid="true"] { border-color: var(--ember); }
+
+/* a note is the hint, or the server's message in its place */
+.review-form .note { margin: 0; color: var(--ink-2); font-size: 0.85rem; }
+.review-form .note:empty, .form-error:empty { display: none; }
+.review-form .note.field-error, .form-error { margin: 0; color: var(--ember); font-size: 0.9rem; font-weight: 600; }
+
+.review-form button[type="submit"] {
+  justify-self: start;
+  margin-top: 0.6rem;
+  font: 800 1rem "Bricolage Grotesque", system-ui, sans-serif;
+  background: var(--lantern);
+  color: var(--night);
+  border: 0;
+  border-radius: 99px;
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+}
+.review-form button[type="submit"]:disabled { opacity: 0.6; cursor: progress; }
