@@ -9,6 +9,13 @@ const search = document.querySelector("#vendor-search");
 const errorEl = document.querySelector(".load-error p");
 const retryBtn = document.querySelector(".load-error button");
 
+// "★ 4.7 · 3 reviews"; rating is null when nobody has reviewed the stall
+function ratingText(stall) {
+  if (stall.rating === null || stall.reviewCount === 0) return "no reviews yet";
+  const reviews = stall.reviewCount === 1 ? "1 review" : `${stall.reviewCount} reviews`;
+  return `★ ${stall.rating.toFixed(1)} · ${reviews}`;
+}
+
 // Data in, element out
 function card(stall) {
   const li = template.content.firstElementChild.cloneNode(true);
@@ -23,6 +30,7 @@ function card(stall) {
   li.querySelector("h3").textContent = stall.name;
   li.querySelector(".blurb").textContent = stall.blurb;
   li.querySelector(".price").textContent = stall.price === 0 ? "free" : `from €${stall.price}`;
+  li.querySelector(".rating").textContent = ratingText(stall);
   li.querySelector(".badge").hidden = !stall.soldOut;
 
   const isSaved = state.saved.has(stall.id);
