@@ -5,11 +5,12 @@ import { render } from "./render.js";
 import { getJSON, describe } from "./api.js";
 import { setupMenu } from "./menu.js";
 import { setupTickets } from "./tickets.js";
+import { setupReviews } from "./reviews.js";
 
 const filters = document.querySelector(".filters");
 const list = document.querySelector(".vendor-list");
 const statusLine = document.querySelector("#vendors .status");
-const retryBtn = document.querySelector(".load-error button");
+const retryBtn = document.querySelector("#vendors .load-error button");
 
 // Every change goes through here: draw, then remember
 function update() {
@@ -66,5 +67,6 @@ retryBtn.addEventListener("click", () => {
 
 setupMenu();
 setupTickets();
+setupReviews();
 load();
 await loadStalls();

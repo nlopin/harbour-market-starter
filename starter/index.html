@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="css/data.css">
   <!-- Lecture 8: styles for loading, errors and ratings are ready; the markup and the JavaScript are yours -->
   <link rel="stylesheet" href="css/fetch.css">
+  <link rel="stylesheet" href="css/reviews.css">
   <!-- A module: deferred automatically, its own scope, imports the rest -->
   <script type="module" src="js/main.js"></script>
 </head>
@@ -72,7 +73,10 @@
             <strong class="badge" hidden>Sold out</strong>
             <div class="card-actions">
               <a class="card-link" href="#map">Find the stall →</a>
-              <button class="save" type="button" aria-pressed="false">♡</button>
+              <span class="card-buttons">
+                <button class="reviews-open" type="button">Reviews</button>
+                <button class="save" type="button" aria-pressed="false">♡</button>
+              </span>
             </div>
           </article>
         </li>
@@ -157,6 +161,28 @@
       <div class="ticket-result" aria-live="polite"></div>
     </section>
   </main>
+
+  <!-- Issue #1: opened by a card's Reviews button, filled by js/reviews.js -->
+  <dialog class="reviews-dialog" aria-labelledby="reviews-title">
+    <div class="reviews-inner">
+      <div class="reviews-head">
+        <h2 id="reviews-title">Reviews</h2>
+        <button class="reviews-close" type="button" aria-label="Close the reviews">×</button>
+      </div>
+      <p class="reviews-status" aria-live="polite" tabindex="-1"></p>
+      <div class="reviews-error load-error">
+        <p role="alert"></p>
+        <button type="button" hidden>Try again</button>
+      </div>
+      <ul class="review-list"></ul>
+    </div>
+  </dialog>
+  <template id="review-template">
+    <li class="review">
+      <p class="review-meta"><strong class="review-author"></strong> <span class="review-stars"></span> <time></time></p>
+      <p class="review-text"></p>
+    </li>
+  </template>
 
   <footer class="site-footer">
     <p>Harbour Night Market · Moll de la Fusta, Barcelona</p>

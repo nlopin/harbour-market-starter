@@ -1,0 +1,65 @@
+/* Issue #1 · Review wall: the Reviews button on the cards and the dialog */
+
+/* three things in the card's bottom row now: the buttons stay together */
+.card-actions { flex-wrap: wrap; }
+.card-buttons { display: flex; gap: 0.5rem; margin-left: auto; }
+
+.reviews-open {
+  font: 700 0.85rem/1 "Bricolage Grotesque", system-ui, sans-serif;
+  color: var(--ink);
+  background: transparent;
+  border: 2px solid var(--line);
+  border-radius: 99px;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  cursor: pointer;
+}
+.reviews-open:hover { border-color: var(--sea); }
+.reviews-open:focus-visible { outline: 3px solid var(--sea); outline-offset: 2px; }
+
+/* no padding on the dialog itself, so a click on it means the backdrop */
+.reviews-dialog {
+  width: min(40rem, 100% - 2rem);
+  max-height: min(90svh, 50rem);
+  padding: 0;
+  color: var(--ink);
+  background: var(--night-2);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+}
+.reviews-dialog::backdrop { background: rgb(8 10 15 / 0.75); }
+.reviews-inner { display: grid; gap: 1rem; padding: 1.5rem; }
+
+.reviews-head { display: flex; justify-content: space-between; align-items: start; gap: 1rem; }
+.reviews-head h2 { margin: 0; font-size: 1.8rem; }
+.reviews-close {
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  font: 700 1.4rem/1 system-ui, sans-serif;
+  color: var(--ink);
+  background: transparent;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.reviews-close:focus-visible { outline: 3px solid var(--sea); outline-offset: 2px; }
+
+.reviews-status { margin: 0; color: var(--ink-2); font-size: 0.9rem; }
+.reviews-status:focus { outline: none; }
+/* fetch.css gives the box a bottom margin; the dialog already has a gap */
+.reviews-dialog .load-error.reviews-error { margin: 0; }
+
+.review-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+.review {
+  padding: 0.9rem 1rem;
+  background: var(--night);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.review p { margin: 0; }
+.review-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.3rem 0.7rem; margin-bottom: 0.3rem; }
+.review-stars { color: var(--lantern); letter-spacing: 0.1em; }
+.review time { color: var(--ink-2); font-size: 0.85rem; }
+/* long words without spaces would push the dialog wider */
+.review-text { color: var(--ink-2); overflow-wrap: anywhere; }

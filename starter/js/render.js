@@ -6,8 +6,8 @@ const filters = document.querySelector(".filters"); // module scope: main.js has
 const count = document.querySelector(".filter-count");
 const savedCount = document.querySelector(".saved-count");
 const search = document.querySelector("#vendor-search");
-const errorEl = document.querySelector(".load-error p");
-const retryBtn = document.querySelector(".load-error button");
+const errorEl = document.querySelector("#vendors .load-error p");
+const retryBtn = document.querySelector("#vendors .load-error button");
 
 // "★ 4.7 · 3 reviews"; rating is null when nobody has reviewed the stall
 function ratingText(stall) {
@@ -38,6 +38,8 @@ function card(stall) {
   save.setAttribute("aria-pressed", String(isSaved));
   save.setAttribute("aria-label", `Save ${stall.name}`);
   save.textContent = isSaved ? "♥" : "♡";
+
+  li.querySelector(".reviews-open").setAttribute("aria-label", `Reviews of ${stall.name}`);
   return li;
 }
 
