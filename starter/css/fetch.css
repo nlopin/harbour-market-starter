@@ -37,3 +37,16 @@
   }
   .vendor-card .rating { grid-area: rating; margin: 0.4rem 0 1rem; }
 }
+
+/* Try again: same look as the hero button, a bit smaller */
+.load-error button {
+  font: inherit;
+  font-weight: 800;
+  background: var(--lantern);
+  color: var(--night);
+  border: 0;
+  border-radius: 99px;
+  padding: 0.6rem 1.3rem;
+  cursor: pointer;
+}
+.load-error button:hover { background: var(--ink); }

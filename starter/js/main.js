@@ -8,6 +8,8 @@ import { setupTickets } from "./tickets.js";
 
 const filters = document.querySelector(".filters");
 const list = document.querySelector(".vendor-list");
+const statusLine = document.querySelector("#vendors .status");
+const retryBtn = document.querySelector(".load-error button");
 
 // Every change goes through here: draw, then remember
 function update() {
@@ -15,8 +17,12 @@ function update() {
   save();
 }
 
+let isLoading = false;
+
 // Never throws: whatever goes wrong ends up in state.status and state.error
 async function loadStalls() {
+  if (isLoading) return; // a double click on Try again sends one request
+  isLoading = true;
   state.status = "loading";
   state.error = "";
   render();
@@ -28,6 +34,7 @@ async function loadStalls() {
     state.error = describe(err);
     state.status = "error";
   }
+  isLoading = false;
   render();
 }
 
@@ -49,6 +56,12 @@ list.addEventListener("click", (event) => {
   if (!button) return;
   toggleSaved(button.closest(".stall").dataset.id);
   update();
+});
+
+// Focus first: the button hides itself as soon as loading starts
+retryBtn.addEventListener("click", () => {
+  statusLine.focus();
+  loadStalls();
 });
 
 setupMenu();
