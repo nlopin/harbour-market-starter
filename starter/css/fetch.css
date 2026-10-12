@@ -36,6 +36,8 @@
   background: var(--ink);
 }
 .status:focus { outline: none; }
+.save-error { color: var(--ember); font-weight: 600; }
+.save:disabled { opacity: 0.35; cursor: not-allowed; }
 
 /* the wide featured card: the rating gets its own row in the grid */
 @container stall (width >= 34rem) {

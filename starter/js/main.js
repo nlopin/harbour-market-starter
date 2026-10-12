@@ -30,6 +30,18 @@ export async function loadStalls() {
   render();
 }
 
+export async function loadSaved() {
+  try {
+    const saved = await getJSON("/saved");
+    state.saved = new Set(saved);
+    state.savedAvailable = true;
+  } catch (error) {
+    console.error("Failed to load saved stalls:", error);
+    state.savedAvailable = false;
+  }
+  render();
+}
+
 filters.addEventListener("click", (event) => {
   const button = event.target.closest("button");
   if (!button) return;
@@ -43,10 +55,15 @@ document.querySelector("#vendor-search").addEventListener("input", (event) => {
 });
 
 // The cards are redrawn all the time: one listener on the list hears every ♡
-list.addEventListener("click", (event) => {
+list.addEventListener("click", async (event) => {
   const button = event.target.closest(".save");
   if (!button) return;
-  toggleSaved(button.closest(".stall").dataset.id);
+
+  const id = button.closest(".stall").dataset.id;
+
+  const promise = toggleSaved(id);
+  update();
+  await promise;
   update();
 });
 
@@ -55,9 +72,12 @@ const retryButton = document.querySelector(".load-error button");
 retryButton?.addEventListener("click", () => {
   statusLine?.focus();
   loadStalls();
+  if (state.savedAvailable === false) {
+    loadSaved();
+  }
 });
 
 setupMenu();
 setupTickets();
 load();
-await loadStalls();
+await Promise.all([loadStalls(), loadSaved()]);

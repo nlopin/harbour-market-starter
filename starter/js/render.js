@@ -9,6 +9,8 @@ const search = document.querySelector("#vendor-search");
 const errorText = document.querySelector(".load-error p[role='alert']");
 const retryButton = document.querySelector(".load-error button");
 
+const saveError = document.querySelector(".save-error");
+
 // Data in, element out
 function card(stall) {
   const li = template.content.firstElementChild.cloneNode(true);
@@ -35,11 +37,24 @@ function card(stall) {
     }
   }
 
-  const isSaved = state.saved.has(stall.id);
   const save = li.querySelector(".save");
+  const isSaved = state.saved.has(stall.id);
+  const isPending = state.pending.has(stall.id);
+
   save.setAttribute("aria-pressed", String(isSaved));
   save.setAttribute("aria-label", `Save ${stall.name}`);
   save.textContent = isSaved ? "♥" : "♡";
+
+  if (state.savedAvailable === false) {
+    save.disabled = true;
+    save.title = "Saved stalls unavailable";
+    save.style.opacity = "";
+  } else {
+    save.disabled = false;
+    save.removeAttribute("title");
+    save.style.opacity = isPending ? 0.5 : 1;
+  }
+  
   return li;
 }
 
@@ -50,6 +65,7 @@ export function render() {
 
   if (retryButton) retryButton.hidden = status !== "error";
   if (errorText) errorText.textContent = status === "error" ? state.error : "";
+  if (saveError) saveError.textContent = state.saveError || "";
 
   if (status === "loading") {
     count.textContent = "";
@@ -75,7 +91,11 @@ export function render() {
     }
 
     count.textContent = visible.length === stalls.length ? `${stalls.length} stalls` : `${visible.length} of ${stalls.length} stalls`;
-    savedCount.textContent = state.saved.size ? `♥ ${state.saved.size} saved` : "";
+    if (state.savedAvailable === false) {
+      savedCount.textContent = "♥ unavailable";
+    } else {
+      savedCount.textContent = state.saved.size ? `♥ ${state.saved.size} saved` : "";
+    }
   }
 
   for (const button of filters.querySelectorAll("button")) {
